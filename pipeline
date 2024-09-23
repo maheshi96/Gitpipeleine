@@ -1,0 +1,98 @@
+pipeline{
+    agent any
+    
+    stages{
+        stage('Build'){
+            steps{
+                echo 'Stage 1: Build'
+                echo 'Task: building the code using automation tool to compile and package the code'
+                echo 'Build Automation tool: Maven'
+                
+            }
+        }
+        stage('Unit and Integration Tests'){
+            steps{
+                echo 'Stage 2: Unit and Integration Tests'
+                echo 'Task: Running unit tests and running integration test'
+                echo 'Test automation tool: Junit 5'
+            }
+            post{
+                success{
+                    emailext(attachLog:true,
+                    to:'maheshi96prem@gmail.com',
+                    subject:'The unit and test integration test: Succsesful',
+                    body:'Stage 2 is succesfully implemmented'
+                    )
+                }
+                failure{
+                    emailext(attachLog: true,
+                    to: 'maheshi96prem@gmail.com',
+                    subject: 'The unit and test integration test: Failure',
+                    body: 'Stage 2 is unsuccesfully implemmented'
+                    )
+                }
+            }
+        }
+        
+        
+        
+    
+        stage('Code Analysis'){
+            steps{
+                echo 'Stage 3: Code analysis'
+                echo 'Task: Analyse the code and ensure it meets standards'
+                echo 'Code analysis tool: sonar-scanner'
+                
+            }
+        }
+        stage('Security Scan'){
+            steps{
+                echo 'Stage 4: Security scan'
+                echo 'Task: Perform security scan to identify vulnerabilities'
+                echo 'Security scan tool: OWASP security tool'
+                
+            }
+            post{
+                success{
+                    emailext(
+                        attachLog: true,
+                        to: 'maheshi96prem@gmail.com',
+                        subject: 'Security scan test: Successful',
+                        body: 'Stage 4 successfully implemented'
+                        )
+                }
+                failure{
+                    emailext(
+                        attachLog: true,
+                        to: 'maheshi96prem@gmail.com',
+                        subject: 'Security scan test: Failure',
+                        body: 'Stage 4 unsuccessfully implemented'
+                        )
+                }
+            }
+        }
+        stage('Deploy to Staging'){
+            steps{
+                echo 'Stage 5: Deploy to staging'
+                echo 'Task: deploy the application to a staging server'
+                
+            }
+        }
+        stage('Integration Tests on Staging'){
+            steps{
+                echo 'Stage 6: Integration Tests on Staging'
+                echo 'Task: running integration tests on the staging to to ensure application functions'
+                
+            }
+        }
+        stage('Deploy to Production'){
+            steps{
+                echo 'Stage 7: Deploy to Production'
+                echo 'Task: deploy the application to a production server'
+                
+            }
+        }
+    }
+    
+}    
+    
